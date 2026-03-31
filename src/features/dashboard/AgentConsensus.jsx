@@ -1,10 +1,11 @@
+import { memo } from "react";
 import { MODE_COLORS, MODE_ICONS, BIAS_COLORS } from "../../constants";
 import { Gauge } from "../../components/charts";
 import Badge from "../../components/ui/Badge";
 import { color, font } from "../../styles/tokens";
 import * as mixins from "../../styles/mixins";
 
-export default function AgentConsensus({ agents }) {
+function AgentConsensus({ agents }) {
   return (
     <div>
       <div style={{ ...mixins.cardTitle, marginBottom: 6 }}>Agent Consensus</div>
@@ -35,3 +36,5 @@ export default function AgentConsensus({ agents }) {
     </div>
   );
 }
+
+export default memo(AgentConsensus);

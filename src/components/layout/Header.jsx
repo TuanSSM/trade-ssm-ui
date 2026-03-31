@@ -1,5 +1,5 @@
+import { memo } from "react";
 import { color, font } from "../../styles/tokens";
-import * as mixins from "../../styles/mixins";
 import { fmtP } from "../../utils";
 import Badge from "../ui/Badge";
 import StatusDot from "../ui/StatusDot";
@@ -11,6 +11,8 @@ const s = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
+    flexWrap: "wrap",
+    gap: 8,
   },
   logo: { display: "flex", alignItems: "center", gap: 8 },
   logoBox: {
@@ -27,11 +29,11 @@ const s = {
   },
 };
 
-export default function Header({ price, priceChange, agentCount }) {
+function Header({ price, priceChange, agentCount }) {
   return (
-    <div style={s.header}>
+    <header style={s.header} role="banner">
       <div style={s.logo}>
-        <div style={s.logoBox}>R</div>
+        <div style={s.logoBox} aria-hidden="true">R</div>
         <div>
           <div style={{ fontWeight: 700, fontSize: font.size.lg, color: color.textBright }}>
             RIFE<span style={{ color: color.bull }}>BTC</span>
@@ -43,16 +45,23 @@ export default function Header({ price, priceChange, agentCount }) {
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
         <div style={{ textAlign: "right" }}>
-          <div style={{ fontSize: font.size.xxl, fontWeight: 700, color: color.textBright }}>
+          <div
+            style={{ fontSize: font.size.xxl, fontWeight: 700, color: color.textBright }}
+            aria-label={`Bitcoin price: $${price.toFixed(2)}`}
+          >
             ${price.toFixed(2)}
           </div>
-          <Badge color={priceChange >= 0 ? color.bull : color.bear}>{fmtP(priceChange)}%</Badge>
+          <Badge color={priceChange >= 0 ? color.bull : color.bear}>
+            {fmtP(priceChange)}%
+          </Badge>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }} aria-label="Market data is live">
           <StatusDot color={color.bull} animate />
           <span style={{ fontSize: font.size.xs, color: color.bull }}>LIVE</span>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
+
+export default memo(Header);

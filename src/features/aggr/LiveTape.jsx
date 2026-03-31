@@ -6,7 +6,7 @@ import * as mixins from "../../styles/mixins";
 
 export default function LiveTape({ trades, connected, setConnected }) {
   return (
-    <Card style={{ gridColumn: "1/2" }}>
+    <Card>
       <CardHead>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <CardTitle>aggr.trade Live Tape</CardTitle>

@@ -12,7 +12,8 @@ function signalColor(signal) {
 
 export default function CommunityScripts() {
   return (
-    <Card style={{ gridColumn: "1/3" }}>
+
+    <Card>
       <CardHead>
         <CardTitle>aggr.trade Community Scripts</CardTitle>
         <span style={{ fontSize: font.size.xxs, color: color.textMuted }}>

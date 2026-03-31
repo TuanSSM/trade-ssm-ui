@@ -1,3 +1,4 @@
+import { memo, useCallback } from "react";
 import { color, font } from "../../styles/tokens";
 import * as mixins from "../../styles/mixins";
 import { MODES, MODE_COLORS } from "../../constants";
@@ -16,6 +17,8 @@ const s = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    flexWrap: "wrap",
+    gap: 6,
   },
   tabs: { display: "flex", gap: 1, background: "#0c0c14", borderRadius: 7, padding: 2 },
   tab: (active) => ({
@@ -32,18 +35,41 @@ const s = {
   }),
 };
 
-export default function TabBar({ tab, setTab, modeFilter, setModeFilter }) {
+function TabBar({ tab, setTab, modeFilter, setModeFilter }) {
+  const handleKeyDown = useCallback(
+    (e) => {
+      const tabKeys = TABS.map(([k]) => k);
+      const idx = tabKeys.indexOf(tab);
+      if (e.key === "ArrowRight" && idx < tabKeys.length - 1) {
+        e.preventDefault();
+        setTab(tabKeys[idx + 1]);
+      } else if (e.key === "ArrowLeft" && idx > 0) {
+        e.preventDefault();
+        setTab(tabKeys[idx - 1]);
+      }
+    },
+    [tab, setTab]
+  );
+
   return (
-    <div style={s.bar}>
-      <div style={s.tabs}>
+    <nav style={s.bar} aria-label="Main navigation">
+      <div style={s.tabs} role="tablist" aria-label="Dashboard tabs" onKeyDown={handleKeyDown}>
         {TABS.map(([k, l]) => (
-          <button key={k} style={s.tab(tab === k)} onClick={() => setTab(k)}>
+          <button
+            key={k}
+            style={s.tab(tab === k)}
+            onClick={() => setTab(k)}
+            role="tab"
+            aria-selected={tab === k}
+            aria-controls={`tabpanel-${k}`}
+            tabIndex={tab === k ? 0 : -1}
+          >
             {l}
           </button>
         ))}
       </div>
-      <div style={{ display: "flex", gap: 3 }}>
-        <button style={mixins.modeBtn(modeFilter === "ALL", "#888")} onClick={() => setModeFilter("ALL")}>
+      <div style={{ display: "flex", gap: 3 }} role="group" aria-label="Mode filter">
+        <button style={mixins.modeBtn(modeFilter === "ALL", "#888")} onClick={() => setModeFilter("ALL")} aria-pressed={modeFilter === "ALL"}>
           ALL
         </button>
         {MODES.map((m) => (
@@ -51,11 +77,14 @@ export default function TabBar({ tab, setTab, modeFilter, setModeFilter }) {
             key={m}
             style={mixins.modeBtn(modeFilter === m, MODE_COLORS[m])}
             onClick={() => setModeFilter(m)}
+            aria-pressed={modeFilter === m}
           >
             {m.slice(0, 4)}
           </button>
         ))}
       </div>
-    </div>
+    </nav>
   );
 }
+
+export default memo(TabBar);
