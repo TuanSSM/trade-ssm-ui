@@ -1,8 +1,9 @@
+import { memo } from "react";
 import { Card, CardBody } from "../../components/ui/Card";
 import { fmt, fmtP } from "../../utils";
 import { color, font } from "../../styles/tokens";
 
-export default function MetricCards({ net, hedgeRatio, totalPnL, positionCount, agents }) {
+function MetricCards({ net, hedgeRatio, totalPnL, positionCount, agents }) {
   const activeCount = agents.filter((a) => a.active).length;
   const metrics = [
     {
@@ -47,3 +48,5 @@ export default function MetricCards({ net, hedgeRatio, totalPnL, positionCount, 
     </>
   );
 }
+
+export default memo(MetricCards);

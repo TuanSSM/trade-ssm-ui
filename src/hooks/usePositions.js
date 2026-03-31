@@ -1,8 +1,28 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { generatePositions } from "../utils";
 
-export function usePositions(agents) {
-  const [positions] = useState(() => generatePositions(agents));
+export function usePositions(agents, price) {
+  const [basePositions, setBasePositions] = useState(() => generatePositions(agents));
+
+  // Live P&L recalculated on every price tick
+  const positions = useMemo(
+    () =>
+      basePositions.map((p) => {
+        const current = price || p.current;
+        const pnl = (p.side === "LONG" ? 1 : -1) * (current - p.entry) * p.size;
+        const pnlPct = +((pnl / (p.entry * p.size)) * 100).toFixed(2);
+        return { ...p, current: +current.toFixed(2), pnl: +pnl.toFixed(2), pnlPct };
+      }),
+    [basePositions, price]
+  );
+
+  const closePosition = useCallback((positionId) => {
+    setBasePositions((prev) => prev.filter((p) => p.id !== positionId));
+  }, []);
+
+  const closeAllByAgent = useCallback((agentId) => {
+    setBasePositions((prev) => prev.filter((p) => p.agentId !== agentId));
+  }, []);
 
   const metrics = useMemo(() => {
     const totalLong = positions
@@ -19,5 +39,5 @@ export function usePositions(agents) {
     return { totalLong, totalShort, net, gross, hedgeRatio, totalPnL };
   }, [positions]);
 
-  return { positions, ...metrics };
+  return { positions, closePosition, closeAllByAgent, ...metrics };
 }

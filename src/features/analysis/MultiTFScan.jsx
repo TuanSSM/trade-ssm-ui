@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, memo } from "react";
 import { MarketContext } from "../../context/MarketContext";
 import { TIMEFRAMES } from "../../constants";
 import { calcEnvelopes } from "../../utils";
@@ -7,11 +7,11 @@ import { Card, CardHead, CardBody, CardTitle } from "../../components/ui/Card";
 import Badge from "../../components/ui/Badge";
 import { color, font } from "../../styles/tokens";
 
-export default function MultiTFScan() {
+function MultiTFScan() {
   const { series, envEMA, envMult } = useContext(MarketContext);
 
   return (
-    <Card style={{ gridColumn: "1/3" }}>
+    <Card style={{ gridColumn: "1 / -1" }}>
       <CardHead>
         <CardTitle>Multi-Timeframe ATR Envelope Scan</CardTitle>
       </CardHead>
@@ -67,3 +67,5 @@ export default function MultiTFScan() {
     </Card>
   );
 }
+
+export default memo(MultiTFScan);

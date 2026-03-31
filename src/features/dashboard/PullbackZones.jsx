@@ -1,8 +1,9 @@
+import { memo } from "react";
 import { color, font } from "../../styles/tokens";
 import * as mixins from "../../styles/mixins";
 import Badge from "../../components/ui/Badge";
 
-export default function PullbackZones({ pullback }) {
+function PullbackZones({ pullback }) {
   if (!pullback) return null;
 
   const zones = [
@@ -68,3 +69,5 @@ export default function PullbackZones({ pullback }) {
     </div>
   );
 }
+
+export default memo(PullbackZones);

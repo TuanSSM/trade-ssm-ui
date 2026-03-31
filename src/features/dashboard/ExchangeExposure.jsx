@@ -1,11 +1,12 @@
+import { memo } from "react";
 import { EXCHANGES } from "../../constants";
 import { Card, CardHead, CardBody, CardTitle } from "../../components/ui/Card";
 import { fmt, fmtP } from "../../utils";
 import { color, font } from "../../styles/tokens";
 
-export default function ExchangeExposure({ positions }) {
+function ExchangeExposure({ positions }) {
   return (
-    <Card style={{ gridColumn: "1/5" }}>
+    <Card>
       <CardHead>
         <CardTitle>Exchange Exposure</CardTitle>
       </CardHead>
@@ -54,3 +55,5 @@ export default function ExchangeExposure({ positions }) {
     </Card>
   );
 }
+
+export default memo(ExchangeExposure);
