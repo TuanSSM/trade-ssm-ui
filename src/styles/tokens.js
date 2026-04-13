@@ -24,6 +24,15 @@ export const color = {
   modeConservative: "#06b6d4",
   modeNormal: "#f5a623",
   modeAggressive: "#ff4976",
+
+  // RL visualization
+  reward: "#00e89d",
+  loss: "#ff4976",
+  exploration: "#06b6d4",
+  qPositive: "#00e89d",
+  qNegative: "#ff4976",
+  qNeutral: "#555",
+  entropy: "#a855f7",
 };
 
 export const space = {

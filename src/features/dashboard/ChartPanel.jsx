@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect, memo } from "react";
+import { useRef, useState, useEffect, useMemo, memo } from "react";
 import { TIMEFRAMES } from "../../constants";
 import { Card, CardHead, CardBody, CardTitle } from "../../components/ui/Card";
-import { EnvelopeChart, ATRBars, CVDLine } from "../../components/charts";
+import { LightweightChart, ATRBars, CVDLine } from "../../components/charts";
 import { color, font } from "../../styles/tokens";
 import * as mixins from "../../styles/mixins";
 
@@ -25,6 +25,15 @@ function ChartPanel({
 
   const subChartWidth = Math.floor((chartWidth - 16) / 2);
 
+  const overlays = useMemo(() => {
+    if (!envelopes) return [];
+    return [
+      { data: envelopes.upper.slice(-60), color: color.bear + "80", lineWidth: 1 },
+      { data: envelopes.lower.slice(-60), color: color.bull + "80", lineWidth: 1 },
+      { data: envelopes.mid.slice(-60), color: color.orange + "60", lineWidth: 1 },
+    ];
+  }, [envelopes]);
+
   return (
     <Card>
       <CardHead>
@@ -44,19 +53,11 @@ function ChartPanel({
       </CardHead>
       <CardBody>
         <div ref={chartRef}>
-          <EnvelopeChart
+          <LightweightChart
             candles={candles.slice(-60)}
-            env={
-              envelopes
-                ? {
-                    upper: envelopes.upper.slice(-60),
-                    lower: envelopes.lower.slice(-60),
-                    mid: envelopes.mid.slice(-60),
-                  }
-                : null
-            }
-            w={chartWidth}
-            h={220}
+            overlays={overlays}
+            width={chartWidth}
+            height={220}
           />
         </div>
         <div style={{ display: "flex", gap: 8, marginTop: 6, alignItems: "center", flexWrap: "wrap" }}>

@@ -1,5 +1,6 @@
-import { useState, useContext, useCallback, memo } from "react";
+import { useState, useContext } from "react";
 import MarketProvider, { MarketContext } from "./context/MarketContext";
+import TrainingProvider, { TrainingContext } from "./context/TrainingContext";
 import { ToastProvider } from "./components/ui/Toast";
 import { Header, TabBar, Footer } from "./components/layout";
 import { EXCHANGES } from "./constants";
@@ -9,6 +10,8 @@ import { color, font } from "./styles/tokens";
 import { Dashboard } from "./features/dashboard";
 import { PositionsTab } from "./features/positions";
 import { AgentsTab } from "./features/agents";
+import { TrainingTab } from "./features/training";
+import { DecisionsTab } from "./features/decisions";
 import { AnalysisTab } from "./features/analysis";
 import { AggrTab } from "./features/aggr";
 
@@ -16,6 +19,7 @@ function AppContent() {
   const [tab, setTab] = useState("dashboard");
   const [modeFilter, setModeFilter] = useState("ALL");
   const { price, priceChange, tick, envEMA, envMult } = useContext(MarketContext);
+  const training = useContext(TrainingContext);
   const { agents } = useAgents(modeFilter);
   const { positions } = usePositions(agents, price);
 
@@ -62,6 +66,8 @@ function AppContent() {
         {tab === "dashboard" && <Dashboard modeFilter={modeFilter} />}
         {tab === "positions" && <PositionsTab modeFilter={modeFilter} />}
         {tab === "agents" && <AgentsTab modeFilter={modeFilter} />}
+        {tab === "training" && <TrainingTab />}
+        {tab === "decisions" && <DecisionsTab modeFilter={modeFilter} />}
         {tab === "analysis" && <AnalysisTab modeFilter={modeFilter} />}
         {tab === "aggr" && <AggrTab />}
       </main>
@@ -73,6 +79,7 @@ function AppContent() {
         tick={tick}
         envEMA={envEMA}
         envMult={envMult}
+        trainingStatus={training?.session?.status}
       />
     </div>
   );
@@ -81,9 +88,11 @@ function AppContent() {
 export default function App() {
   return (
     <MarketProvider>
-      <ToastProvider>
-        <AppContent />
-      </ToastProvider>
+      <TrainingProvider>
+        <ToastProvider>
+          <AppContent />
+        </ToastProvider>
+      </TrainingProvider>
     </MarketProvider>
   );
 }
