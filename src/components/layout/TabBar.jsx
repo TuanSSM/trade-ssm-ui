@@ -7,6 +7,8 @@ const TABS = [
   ["dashboard", "\u25C8 Dashboard"],
   ["positions", "\u2B21 Positions"],
   ["agents", "\u2699 Agents"],
+  ["training", "\u25B3 Training"],
+  ["decisions", "\u25CE Decisions"],
   ["analysis", "\u25E4 Envelopes"],
   ["aggr", "\u25C9 aggr.trade"],
 ];

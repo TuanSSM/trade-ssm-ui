@@ -5,3 +5,6 @@ export { usePositions } from "./usePositions";
 export { useAggrTrades } from "./useAggrTrades";
 export { usePullback } from "./usePullback";
 export { useEquityCurve } from "./useEquityCurve";
+export { useTrainingMetrics } from "./useTrainingMetrics";
+export { useTradeHistory } from "./useTradeHistory";
+export { useAgentDecisions } from "./useAgentDecisions";
